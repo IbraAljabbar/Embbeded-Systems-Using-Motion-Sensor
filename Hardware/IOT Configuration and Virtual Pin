@@ -1,0 +1,61 @@
+# Hardware Architecture & Blynk IoT Setup Guide
+
+This document supplies the comprehensive physical layout configuration, electrical power scheme, and Blynk virtual pin allocations for the IoT-enabled Smart Home Security System.
+
+---
+
+## Power Distribution Scheme
+
+The system relies on a unified voltage network managed directly from the central processing chip:
+1. Primary Power Link: The entire prototyping board receives its electrical supply from a 5V USB cable plugged directly into the ESP8266 development board via the Micro USB port.
+2. Logic Voltage Rails: The ESP8266 breaks out 3.3V and VIN (5V) down the parallel power tracks of the breadboard to keep all sensory peripherals running.
+
+System Protection Tip: Always install a fixed resistor in series with the LED indicator lamp. This element limits maximum current flowing through the microcontroller pin, protecting the internal LED hardware from blowing out.
+
+---
+
+## Detailed Pin Interconnections
+
+### 1. PIR Motion Sensor
+The Passive Infrared sensor monitors surrounding thermal variations and returns a simple high or low digital signal when movement breaks across its tracking zone.
+- Connect the PIR VCC pin to the ESP8266 VIN pin (5V line) or 5V rail.
+- Connect the PIR GND pin to an ESP8266 GND terminal.
+- Connect the PIR Digital Output signal pin to ESP8266 GPIO 14 (labeled as D5).
+
+### 2. Light Dependent Resistor (LDR)
+The LDR changes its internal resistance based on ambient lux levels. It forms a voltage divider alongside a fixed resistor to send changing analog levels back to the board.
+- Connect one terminal wire of the LDR to the ESP8266 3.3V track.
+- Connect the opposite terminal wire of the LDR to the ESP8266 A0 Analog Input pin.
+- Run a pull-down resistor from that same A0 junction track directly to an ESP8266 GND terminal.
+
+### 3. LED Lighting Output
+The LED provides automated nocturnal illumination whenever ambient light parameters fall past safe baseline variables.
+- Connect the long positive leg (Anode) of the LED to ESP8266 GPIO 12 (labeled as D6).
+- Connect the short negative leg (Cathode) of the LED to one end of your protective resistor.
+- Connect the remaining open end of the resistor to an ESP8266 GND terminal.
+
+### 4. Piezo Buzzer Intrusion Alarm
+The buzzer functions as an audible sound siren whenever unexpected activity steps inside the security tracking zone during dark cycles.
+- Connect the positive wire terminal of the buzzer to ESP8266 GPIO 13 (labeled as D7).
+- Connect the negative wire terminal of the buzzer to an ESP8266 GND terminal.
+
+---
+
+## Blynk IoT Virtual Datastream Configuration
+
+Configure your online Blynk Dashboard or Mobile Application with these matching Datastreams to process incoming telemetric data packs correctly:
+
+- Virtual Pin V0
+  - Data Type: Integer
+  - Purpose: Tracks Live Ambient Light Levels (LDR Value)
+  - Recommended Widget: Value Display, Gauge, or SuperChart
+
+- Virtual Pin V1
+  - Data Type: Integer (0 or 1)
+  - Purpose: Tracks Presence Detection State (0 for Safe, 1 for Motion Triggered)
+  - Recommended Widget: LED Indicator Widget or Binary State Label
+
+- Virtual Pin V2
+  - Data Type: String
+  - Purpose: Displays Real-time Security System Status Overviews (Secured Day/Night or Critical Intrusion Alerts)
+  - Recommended Widget: Text Input / Label Display Panel
