@@ -1,7 +1,7 @@
-// =========================
+// ========================
 // SMART HOME SECURITY SYSTEM
 // ESP8266 + PIR + LDR + LED + BUZZER
-// =========================
+// ========================
 
 const int pirPin = D5;
 const int ledPin = D6;
