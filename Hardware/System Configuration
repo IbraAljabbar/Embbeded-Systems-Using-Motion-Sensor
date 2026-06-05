@@ -1,0 +1,48 @@
+# Hardware Architecture & Wiring Guide
+
+This document supplies the comprehensive physical layout configuration, electrical power scheme, and local input-output node links for the Embedded Systems Using Motion Sensor device.
+
+---
+
+## Power Distribution Scheme
+
+The system relies on a unified voltage network managed directly from the central processing chip:
+1. Primary Power Link: The entire prototyping board receives its electrical supply from a 5V USB cable plugged directly into the ESP8266 development board via the Micro USB port.
+2. Logic Voltage Rails: The ESP8266 breaks out 3.3V and VIN (5V) down the parallel power tracks of the breadboard to keep all sensory peripherals running.
+
+System Protection Tip: Always install a fixed resistor in series with the LED indicator lamp. This element limits maximum current flowing through the microcontroller pin, protecting the internal LED hardware from blowing out.
+
+---
+
+## Detailed Pin Interconnections
+
+### 1. PIR Motion Sensor
+The Passive Infrared sensor monitors surrounding thermal variations and returns a simple high or low digital signal when movement breaks across its tracking zone.
+- Connect the PIR VCC pin to the ESP8266 VIN pin (5V line).
+- Connect the PIR GND pin to an ESP8266 GND terminal.
+- Connect the PIR Digital Output signal pin to ESP8266 GPIO 14 (labeled as D5).
+
+### 2. Light Dependent Resistor (LDR)
+The LDR changes its internal resistance based on ambient lux levels. It forms a voltage divider alongside a fixed resistor to send changing analog levels back to the board.
+- Connect one terminal wire of the LDR to the ESP8266 3.3V track.
+- Connect the opposite terminal wire of the LDR to the ESP8266 A0 Analog Input pin.
+- Run a pull-down resistor from that same A0 junction track directly to an ESP8266 GND terminal.
+
+### 3. LED Lighting Output
+The LED provides automated nocturnal illumination whenever ambient light parameters fall past safe baseline variables.
+- Connect the long positive leg (Anode) of the LED to ESP8266 GPIO 12 (labeled as D6).
+- Connect the short negative leg (Cathode) of the LED to one end of your protective resistor.
+- Connect the remaining open end of the resistor to an ESP8266 GND terminal.
+
+### 4. Piezo Buzzer Intrusion Alarm
+The buzzer functions as an audible sound siren whenever unexpected activity steps inside the security tracking zone during dark cycles.
+- Connect the positive wire terminal of the buzzer to ESP8266 GPIO 13 (labeled as D7).
+- Connect the negative wire terminal of the buzzer to an ESP8266 GND terminal.
+
+---
+
+## Prototyping Infrastructure
+
+The operational circuit is arranged and structured using standard embedded design tools:
+- Breadboard: Functions as the physical mounting grid to share common power tracks and hold component leads side-by-side.
+- Jumper Wires: Serve as the point-to-point connections making up the signal, power, and ground networks of the local architecture.
